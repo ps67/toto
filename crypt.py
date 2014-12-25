@@ -1,8 +1,6 @@
 #argecho.py
 import sys
 
-
-
 import os, random, struct
 from Crypto.Cipher import AES
 
@@ -78,10 +76,18 @@ def encrypt_file(key, in_filename, out_filename=None, chunksize=64*1024):
 #decrypt_file("ygygugugyugygygt","toto.enc","plain.txt")
 
 
-arg = sys.argv
 
-if arg[1] == "-e" :
-  encrypt_file("ygygugugyugygygt","toto")
+from optparse import OptionParser
 
-elif arg[1] == "-d" :
-  decrypt_file("ygygugugyugygygt","toto.enc","plain.txt")
+parser = OptionParser()
+parser.add_option("-i", dest="infile")
+parser.add_option("-o", dest="filename")
+parser.add_option("-k", action="store", dest="key",
+                  help="16 or 32 bytes key", metavar="KEY")
+parser.add_option("-d", action="store_true", default=False,
+                  help="decrypt data (default: encrypt data)", metavar="FILE")
+parser.add_option("-q", "--quiet",
+                  action="store_false", dest="verbose", default=True,
+                  help="don't print status messages to stdout")
+
+(options, args) = parser.parse_args() 
